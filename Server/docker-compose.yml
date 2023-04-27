@@ -1,0 +1,29 @@
+version: '2'
+services:
+    grid_endpoint:
+        container_name: whitecore-grid
+        restart: always
+        image: flymanos/whitecore-docker-grid:latest
+        expose:
+            - 8002:8002
+        ports:
+            - 8002:8002
+        links:
+            - grid_mysqli
+        environment:
+            DB_HOST: name2key_mysqli
+            DB_DATABASE: 'name2keydb'
+            DB_USERNAME: '{MySQLDBUser}'
+            DB_PASSWORD: '{MySQLDBPW}'
+
+    grid_mysqli:
+        container_name: whitecore_mysqli
+        image: mariadb
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: '{MySQLRootPW}'
+            MYSQL_USER: '{MySQLDBUser}'
+            MYSQL_PASSWORD: '{MySQLDBPW}'
+            MYSQL_DATABASE: 'name2keydb'
+        volumes:
+            - grid-db:/var/lib/mysql

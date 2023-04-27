@@ -1,0 +1,29 @@
+version: '2'
+services:
+    region_endpoint:
+        container_name: region_endpoint
+        restart: always
+        image: flymanos/whitecore-docker-region:latest
+        expose:
+            - 8002:8002
+        ports:
+            - 8002:8002
+        links:
+            - region_mysqli
+        environment:
+            DB_HOST: name2key_mysqli
+            DB_DATABASE: 'name2keydb'
+            DB_USERNAME: '{MySQLDBUser}'
+            DB_PASSWORD: '{MySQLDBPW}'
+
+    region_mysqli:
+        container_name: region_mysqli
+        image: mariadb
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: '{MySQLRootPW}'
+            MYSQL_USER: '{MySQLDBUser}'
+            MYSQL_PASSWORD: '{MySQLDBPW}'
+            MYSQL_DATABASE: 'name2keydb'
+        volumes:
+            - region-db:/var/lib/mysql
